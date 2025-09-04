@@ -13,8 +13,14 @@ class AuthorAdmin(admin.ModelAdmin):
 admin.site.register(Author, AuthorAdmin)
 @admin.register(Book)
 class BookAdmin(admin.ModelAdmin):
-    list_display = ('title', 'genre', 'language', 'display_author')
+    list_display = ('title', 'genre', 'language', 'display_author', 'show_photo')
     list_filter = ('genre', 'author')
+    readonly_fields = ["show_photo"]
+    def show_photo(self, obj):
+        return format_html(f'<img src="{obj.photo.url}" style="max-height: 100px;">')
+
+    show_photo.short_description = 'Обложка'
+
 @admin.register(BookInstance)
 class BookInstanceAdmin(admin.ModelAdmin):
     list_filter = ('book', 'status')

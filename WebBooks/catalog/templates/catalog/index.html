@@ -5,10 +5,30 @@
 {% endblock header %}
 {% block content %}
     <div class="container-fluid my-2">
-        <div class="row">
-            <div class="col text-center ">
-                <div>{{text_body}}</div>
+        <div class="row bg-success text-white mx-2">
+            <div class="col text-center">
+                <div>БЛа бла бла</div>
             </div>
         </div>
     </div>
+<div class="row my-2 text-white">
+    <div class="col mx-2 bg-secondary">Кол-во книг - {{num_books}}</div>
+    <div class="col mx-2 bg-secondary">На складе - {{num_instance_available}}</div>
+    <div class="col mx-2 bg-secondary">Кол-во авторов - {{num_author}}</div>
+</div>
+
+{% if num_books > 0 %}
+<div class="row my-2">
+    {% for obj in books %}
+    <div class="card" style="width: 15%">
+        <img src="{{ obj.photo.url}}" alt="Лого книги" class="card-img-top" style="height:400px; object-fit: cover;">
+        <div class="card-body">
+            <p class="card-text-email">
+                {{obj.title}}, Цена:{{obj.price}} руб.
+            </p>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
 {% endblock content %}

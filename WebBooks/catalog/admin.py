@@ -18,7 +18,6 @@ class BookAdmin(admin.ModelAdmin):
     readonly_fields = ["show_photo"]
     def show_photo(self, obj):
         return format_html(f'<img src="{obj.photo.url}" style="max-height: 100px;">')
-
     show_photo.short_description = 'Обложка'
 
 @admin.register(BookInstance)

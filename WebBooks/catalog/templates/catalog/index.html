@@ -1,34 +1,61 @@
 {% extends "catalog/base.html" %}
 
 {% block header %}
-    <h5>{{ text_head }}</h5>
+    <h5 class="text-center my-3 text-secondary" style="font-weight: 500; font-size: 1.2rem;">
+        {{ text_head }}
+    </h5>
 {% endblock header %}
+
 {% block content %}
-    <div class="container-fluid my-2">
-        <div class="row bg-success text-white mx-2">
-            <div class="col text-center">
-                <div>БЛа бла бла</div>
+<div class="container my-4">
+    <div class="row bg-dark text-light rounded-4 py-3 mb-4 shadow-sm">
+        <div class="col text-center fst-italic fs-6" style="font-weight: 400;">
+            Добро пожаловать в магазин <span class="fw-semibold text-warning">Книжный</span> — современный онлайн-магазин с лучшими книгами
+        </div>
+    </div>
+
+    <div class="row text-light mb-4 gx-3">
+        <div class="col-12 col-md-4">
+            <div class="p-3 bg-secondary rounded-3 shadow-sm text-center small fw-semibold">
+                Количество книг: <span class="badge bg-warning text-dark fs-6">{{ num_books }}</span>
+            </div>
+        </div>
+        <div class="col-12 col-md-4">
+            <div class="p-3 bg-secondary rounded-3 shadow-sm text-center small fw-semibold">
+                В наличии на складе: <span class="badge bg-warning text-dark fs-6">{{ num_instance_available }}</span>
+            </div>
+        </div>
+        <div class="col-12 col-md-4">
+            <div class="p-3 bg-secondary rounded-3 shadow-sm text-center small fw-semibold">
+                Всего авторов: <span class="badge bg-warning text-dark fs-6">{{ num_author }}</span>
             </div>
         </div>
     </div>
-<div class="row my-2 text-white">
-    <div class="col mx-2 bg-secondary">Кол-во книг - {{num_books}}</div>
-    <div class="col mx-2 bg-secondary">На складе - {{num_instance_available}}</div>
-    <div class="col mx-2 bg-secondary">Кол-во авторов - {{num_author}}</div>
-</div>
 
-{% if num_books > 0 %}
-<div class="row my-2">
-    {% for obj in books %}
-    <div class="card" style="width: 15%">
-        <img src="{{ obj.photo.url}}" alt="Лого книги" class="card-img-top" style="height:400px; object-fit: cover;">
-        <div class="card-body">
-            <p class="card-text-email">
-                {{obj.title}}, Цена:{{obj.price}} руб.
-            </p>
-        </div>
+    <div class="row mb-3">
+        <h3 class="text-center text-dark fw-bold" style="font-size: 1.6rem;">Каталог книг</h3>
     </div>
-    {% endfor %}
+
+    {% if num_books > 0 %}
+    <div class="row g-4 ">
+        {% for obj in books %}
+        <div class="col-6 col-sm-4 col-md-3">
+            <div class="card h-100 border-0 rounded-4 shadow" style="transition: transform 0.3s ease;">
+                <img src="{{ obj.photo.url }}" alt="Обложка книги" class="card-img-top rounded-top" style="height: 280px; object-fit: cover;">
+                <div class="card-body text-center py-2">
+                    <h6 class="card-title fw-semibold text-truncate" title="{{ obj.title }}" style="font-size: 1rem;">{{ obj.title }}</h6>
+                    <p class="card-text text-muted mb-0" style="font-size: 0.9rem;">Цена: <span class="text-dark fw-semibold">{{ obj.price }} ₽</span></p>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <p class="text-center text-muted fw-medium" style="font-size: 1rem;">В магазине пока нет книг.</p>
+    {% endif %}
+
+    <div class="row text-center text_dark lh2">
+        <h6>Число посещений {{num_visits}}</h6>
+    </div>
 </div>
-{% endif %}
 {% endblock content %}

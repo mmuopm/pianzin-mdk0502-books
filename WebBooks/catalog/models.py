@@ -1,6 +1,6 @@
 from django.db import models
+from django.db.models import CASCADE
 from django.urls import reverse
-
 class Genre(models.Model):
     name = models.CharField(max_length=200,
                             help_text='Введите жанр книги',
@@ -24,18 +24,18 @@ class Publisher(models.Model):
 
 class Author(models.Model):
     first_name = models.CharField(max_length=100,
-                                help_text='Введите имя автора',
-                                verbose_name='Имя автора')
+                                  help_text='Введите имя автора',
+                                  verbose_name='Имя автора')
     last_name = models.CharField(max_length=100,
                                   help_text='Введите фамилию автора',
                                   verbose_name='Фамилия автора')
-    date_of_birth = models.DateField(help_text='Введите дату рождения автора',
-                                     verbose_name='Дата рождения автора',
+    date_of_birth = models.DateField(help_text='Введите дату рождения',
+                                     verbose_name='Дата рождения',
                                      null=True, blank=True)
     about = models.TextField(help_text='Введите сведения об авторе',
                              verbose_name='Сведения об авторе')
     photo = models.ImageField(upload_to='images',
-                              help_text='Выберите фото автора',
+                              help_text='Введите фото автора',
                               verbose_name='Фото автора',
                               null=True, blank=True)
     def __str__(self):
@@ -44,21 +44,21 @@ class Author(models.Model):
 class Book(models.Model):
     title = models.CharField(max_length=200,
                              help_text='Введите название книги',
-                             verbose_name='Название книги')
-    genre = models.ForeignKey('Genre', on_delete=models.CASCADE,
+                              verbose_name='Название книги')
+    genre = models.ForeignKey('Genre',on_delete=models.CASCADE,
                              help_text='Выберите жанр для книги',
-                             verbose_name='Жанр книги')
-    language = models.ForeignKey('Language', on_delete=models.CASCADE,
+                              verbose_name='Жанр книги')
+    language = models.ForeignKey('Language',on_delete=models.CASCADE,
                              help_text='Выберите язык для книги',
-                             verbose_name='Язык книги')
+                              verbose_name='Язык книги')
     publisher = models.ForeignKey('Publisher', on_delete=models.CASCADE,
-                             help_text='Выберите издательство книги',
-                             verbose_name='Издательство книги')
+                              help_text='Выберите издательство книги',
+                              verbose_name='Издательство книги')
     year = models.CharField(max_length=4,
-                             help_text='Выберите год издания книги',
-                             verbose_name='Год издания книги')
+                            help_text='Введите год издания книги',
+                            verbose_name='Год издания')
     author = models.ManyToManyField('Author',
-                                    help_text='Выберите автора книги',
+                                    help_text='Выберите автора',
                                     verbose_name='Автор книги')
     summary = models.TextField(max_length=1000,
                                help_text='Введите краткое описание книги',
@@ -70,7 +70,7 @@ class Book(models.Model):
                                 help_text='Введите цену книги',
                                 verbose_name='Цена (руб.)')
     photo = models.ImageField(upload_to='images',
-                              help_text='Выберите изображение обложки',
+                              help_text='Введите избражение обложки',
                               verbose_name='Изображение обложки')
     def display_author(self):
         return ', '.join([author.last_name for author in self.author.all ()])
@@ -82,7 +82,7 @@ class Book(models.Model):
 
 class Status(models.Model):
     name = models.CharField(max_length=20,
-                            help_text='Введите статус экземпляра',
+                            help_text='Введитье статус экземпляра книги',
                             verbose_name='Статус экземпляра книги')
     def __str__(self):
         return self.name
@@ -92,12 +92,31 @@ class BookInstance(models.Model):
                              null=True)
     inv_nom = models.CharField(max_length=20,
                                null=True,
-                               help_text='Изменить инвентарный номер экземпляра',
-                               verbose_name='Инвентарный номер экземпляра')
-    status = models.ForeignKey('Status',
-                               on_delete=models.CASCADE,
-                               null=True,
-                               help_text='Изменить состояние экземпляра',
-                               verbose_name='Статус экземпляра книги')
+                               help_text='Введите инвентарный номер экземпляра',
+                               verbose_name='Инвентарный номер')
+    status= models.ForeignKey('Status',
+                              on_delete=models.CASCADE,
+                              null=True,
+                              help_text='Изменить состояние экземляра',
+                              verbose_name='Статус экземляра книги')
+
+    due_back = models.DateField(null=True,
+                                blank=True,
+                                help_text='Введите конец срока статуса',
+                                verbose_name='Дата окончания статуса')
+
+    class Meta:
+        ordering = ['due_back']
     def __str__(self):
-        return '%s %s %s' % (self.inv_nom, self.book, self.status)
+        return '%s %s %s' % (self.inv_nom,self.book,self.status)
+
+
+
+
+
+
+
+
+
+
+
